@@ -41,7 +41,7 @@ func ChangeHeadimg(c *gin.Context){
 		ResError(err,c)
 		return
 	}
-	ResSucces("头像已修改",c)
+	ResSucces("头像修改完成",c)
 }
 
 //修改密码

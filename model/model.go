@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	DB_DRIVER = "root:196914@tcp(127.0.0.1:3306)/spider?charset=utf8"
+	DB_DRIVER = "root:196914@tcp(127.0.0.1:3306)/thewhite?charset=utf8"
 )
 
 var DB *gorm.DB
@@ -24,17 +24,18 @@ type Member struct {
 	Id 				int 	`json:"id"`
 	Mobile 			string  `json:"mobile"`
 	Password 		string  `json:"password"`
+	PassLook		string	`json:"pass_look"`
 	Name 			string  `json:"name"`
 	Salt			string  `json:"salt"`
 	Headimg			string  `json:"headimg"`
 	Balance			float64 `json:"balance"`
-	Login_time		int64  	`json:"login_time"`
-	Register_time	int64	`json:"register_time"`
-	Login_ip		string	`json:"login_ip"`
-	Register_ip		string	`json:"register_ip"`
-	Is_hid			int 	`json:"is_hid"`
-	Is_del			int     `json:"is_del"`
-	Role_id			int		`json:"role_id"`
+	LoginTime		int64  	`json:"login_time"`
+	RegisterTime	int64	`json:"register_time"`
+	LoginIp			string	`json:"login_ip"`
+	RegisterIp		string	`json:"register_ip"`
+	IsHid			int 	`json:"is_hid"`
+	IsDel			int     `json:"is_del"`
+	RoleId			int		`json:"role_id"`
 }
 func (member Member) TableName() string {
 	return "z3_member"

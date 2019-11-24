@@ -207,3 +207,7 @@ func FileWrite(f *os.File,content string){
 		panic(err)
 	}
 }
+
+func Handle404(c *gin.Context) {
+	ResError("Not Fund 404",c)
+}

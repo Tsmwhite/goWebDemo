@@ -1,5 +1,7 @@
 package controllers
 
+//用户登陆注册
+
 import (
 	"net/http"
 	time2 "time"
@@ -7,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"regexp"
 )
+
 const (
 	MobileReg = `^1([38][0-9]|14[579]|5[^4]|16[6]|7[1-35-8]|9[189])\d{8}$`
 )
@@ -51,13 +54,13 @@ func LoginAuth(c *gin.Context){
 	mobile := c.PostForm("mobile")
 	password := c.PostForm("password")
 	if mobile == "" {
-		ResError("请输入账户名",c)
+		ResError("请输入11位手机号",c)
 		return
 	}
 
 	rgx := regexp.MustCompile(MobileReg)
 	if ! rgx.MatchString(mobile) {
-		ResError("账户格式不正确（请输入11位手机号）",c)
+		ResError("手机号码格式不正确",c)
 		return
 	}
 
@@ -153,10 +156,10 @@ func Register (c *gin.Context) {
 		Salt:salt,
 		Mobile:mobile,
 		Password:password,
-		Register_time:time,
-		Login_time:time,
-		Register_ip:ip,
-		Login_ip:ip,
+		RegisterTime:time,
+		LoginTime:time,
+		RegisterIp:ip,
+		LoginIp:ip,
 	}
 	err := memberInfo.Insert()
 	if err == nil{

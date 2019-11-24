@@ -1,13 +1,20 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"z3/controllers"
 	"z3/webscoket"
+	"z3/router"
+	"z3/common/mail"
 )
 
 func main (){
+	email := mail.ResMail()
+	email.SetMessage("577689878@qq.com","test-send-mail","<h1>go go go </h1>","","")
+	res := email.SendMail()
+	fmt.Println(res)
+	return
 	go func(){
 		//监听websocket
 		go webscoket.Manager.ListenEvent()
@@ -15,23 +22,8 @@ func main (){
 		http.ListenAndServe(":8888",nil)
 	}()
 
-	router := gin.Default()
-	router.NoRoute(Handle404)
-	router.POST("/login",controllers.LoginAuth)
-	router.POST("/register",controllers.Register)
-
-	userCenter := router.Group("/user")
-	userCenter.Use(controllers.AuthVerify())
-	{
-		userCenter.GET("/info")
-		userCenter.POST("/headimg",controllers.ChangeHeadimg)
-		userCenter.POST("/password",controllers.ChangePassword)
-		userCenter.POST("/changeinfo")
-	}
-
-	router.Run(":8080")
-}
-
-func Handle404(c *gin.Context) {
-	controllers.ResError("Not Fund 404",c)
+	//注册gin路由 开启端口监听
+	ginEngine := gin.Default()
+	router.RegRouter(ginEngine)
+	ginEngine.Run(":8080")
 }
