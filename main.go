@@ -10,9 +10,7 @@ import (
 )
 
 func main (){
-	email := mail.ResMail()
-	email.SetMessage("577689878@qq.com","test-send-mail","<h1>go go go </h1>","","")
-	res := email.SendMail()
+	res := mail.ResMail().SetMessage("577689878@qq.com","test-send-mail","<h1>go go go </h1>").Send()
 	fmt.Println(res)
 	return
 	go func(){

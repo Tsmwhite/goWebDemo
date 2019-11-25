@@ -45,28 +45,26 @@ type Attachment struct {
 }
 
 //设置邮件内容
-func (m *Mail) SetMessage(to, sub, body, contentType, filename string) {
-	msg := &m.Msg
-	msg.to = to
-	msg.subject = sub
-	msg.body = body
-	msg.attachment = Attachment{
-		name:        "",
-		contentType: "",
-		withFile:    false,
+func (m *Mail) SetMessage(to, sub, body string) *Mail{
+	m.Msg.to = to
+	m.Msg.subject = sub
+	m.Msg.body = body
+	return m
+}
+
+//添加附件
+func (m *Mail) AddFile(filename string) *Mail{
+	if _, e := os.Stat(filename); e == nil {
+		m.Msg.attachment.withFile = true
+		m.Msg.attachment.name = filename
+		m.Msg.attachment.contentType = strings.Split(filename, ".")[1]
 	}
-	if filename != "" {
-		if _, e := os.Stat(filename); e == nil {
-			msg.attachment.withFile = true
-			msg.attachment.name = filename
-			msg.attachment.contentType = strings.Split(filename, ".")[1]
-		}
-	}
+	return m
 }
 
 //返回一个默认邮件结构
-func ResMail() Mail {
-	return Mail{
+func ResMail() *Mail {
+	return &Mail{
 		Server: Server{
 			host:     "smtp.163.com",
 			account:  "thesmallwhiteme@163.com",
@@ -85,7 +83,7 @@ func (s Server) Auth() smtp.Auth {
 }
 
 //发送邮件
-func (m Mail) SendMail() error {
+func (m *Mail) Send() error {
 	server := m.Server
 	auth := server.Auth()
 	message := m.Msg
@@ -127,7 +125,6 @@ func (m Mail) SendMail() error {
 
 	buffer.WriteString("\r\n--" + boundary + "--")
 	send_to := strings.Split(message.to, ";")
-
 	if server.ssl {
 		return SendMailUsingTLS(server.host+":"+server.port, auth, server.account, send_to, buffer.Bytes())
 	} else {
